@@ -1,0 +1,23 @@
+<section>
+    <h3>void* &mdash; "Don't do this"</h3>
+    <pre><code class="language-cpp" data-trim data-noescape>
+struct Wrapper {
+    void* data;
+    void (*draw_fn)(const void*);
+};
+
+void draw_circle(const void* p) {
+    static_cast&lt;const Circle*&gt;(p)-&gt;draw();
+}
+    </code></pre>
+    <div class="fragment fade-up" style="margin-top: 1em;">
+        <ul>
+            <li>No type safety &mdash; cast to the wrong type = <strong>undefined behavior</strong></li>
+            <li>No ownership semantics &mdash; who deletes what?</li>
+            <li>Compiler can't help you</li>
+        </ul>
+    </div>
+    <p class="fragment fade-up" style="color: #c05050; font-weight: bold; margin-top: 0.8em;">
+        Never do this in modern C++.
+    </p>
+</section>

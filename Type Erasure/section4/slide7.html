@@ -1,0 +1,51 @@
+<section>
+    <h3>Step 5 &mdash; Copy Semantics</h3>
+    <p style="font-size: 0.85em; color: var(--text-light);">
+        <code>unique_ptr</code> is move-only. We need <code>clone()</code> for deep copy.
+    </p>
+    <div style="display: flex; gap: 1em; align-items: flex-start;">
+        <div style="flex: 1;">
+            <pre><code class="language-cpp" data-trim data-noescape
+                data-line-numbers="4-5|4-5,16-19">
+struct Concept {
+    virtual ~Concept() = default;
+    virtual void draw() const = 0;
+    virtual std::unique_ptr&lt;Concept&gt;
+        clone() const = 0;
+};
+
+template &lt;typename T&gt;
+struct Model : Concept {
+    T obj;
+    Model(T obj) : obj(std::move(obj)) {}
+    void draw() const override {
+        obj.draw();
+    }
+    
+    std::unique_ptr&lt;Concept&gt;
+    clone() const override {
+        return std::make_unique&lt;Model&gt;(obj);
+    }
+};
+            </code></pre>
+        </div>
+        <div class="fragment fade-up" style="flex: 1;">
+            <pre><code class="language-cpp" data-trim data-noescape>
+// Copy constructor &amp; assignment
+Drawable(const Drawable&amp; other)
+    : self(other.self-&gt;clone()) {}
+
+Drawable&amp; operator=(const Drawable&amp; other)
+{
+    self = other.self-&gt;clone();
+    return *this;
+}
+
+// We force move semantic
+Drawable(Drawable&amp;&amp;) noexcept = default;
+Drawable&amp; operator=(Drawable&amp;&amp;) noexcept
+    = default;
+            </code></pre>
+        </div>
+    </div>
+</section>

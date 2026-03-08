@@ -1,0 +1,21 @@
+<section>
+    <h3>A simple question</h3>
+    <p>We have unrelated types that share a common behavior...</p>
+    <pre><code class="language-cpp" data-trim data-noescape>
+struct Circle {
+    double radius;
+    void draw() const { std::cout << "Circle(" << radius << ")\n"; }
+};
+
+struct Square {
+    double side;
+    void draw() const { std::cout << "Square(" << side << ")\n"; }
+};
+    </code></pre>
+    <div class="fragment fade-up">
+        <p>How do we store them together?</p>
+        <pre><code class="language-cpp" data-trim>
+std::vector&lt;???&gt; shapes;
+        </code></pre>
+    </div>
+</section>

@@ -1,0 +1,20 @@
+<section>
+    <h3>Inheritance &mdash; The Downsides</h3>
+    <ul>
+        <li class="fragment fade-up">
+            <strong>Intrusive</strong> &mdash; every type must inherit from <code>Shape</code>
+        </li>
+        <li class="fragment fade-up">
+            <strong>Can't adapt third-party types</strong> &mdash; you don't own their code
+        </li>
+        <li class="fragment fade-up">
+            <strong>Requires pointers</strong> &mdash; <code>unique_ptr</code> or <code>shared_ptr</code> everywhere
+        </li>
+        <li class="fragment fade-up">
+            <strong>No value semantics</strong> &mdash; can't simply copy a <code>vector&lt;unique_ptr&lt;Shape&gt;&gt;</code>. If <code>shared_ptr</code>, modifying one will contaminates all the others.
+        </li>
+        <li class="fragment fade-up">
+            <strong>Pointers invite bugs</strong> &mdash; dangling, slicing, ownership confusion
+        </li>
+    </ul>
+</section>

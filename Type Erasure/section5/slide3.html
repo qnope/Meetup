@@ -1,0 +1,57 @@
+<section>
+    <h3>Our Drawable vs std::polymorphic</h3>
+    <div style="display: flex; gap: 2em; justify-content: center; align-items: start; margin-top: 1em;">
+        <div style="flex: 1;">
+            <p style="font-size: 0.85em; color: var(--accent);"><strong>Our Drawable (~30 lines)</strong></p>
+            <pre><code class="language-cpp" data-trim data-noescape style="font-size: 0.65em;">
+class Drawable {
+    struct Concept { /* ... */ };
+    template&lt;typename T&gt;
+    struct Model : Concept { /* ... */ };
+    std::unique_ptr&lt;Concept&gt; self;
+public:
+    template&lt;typename T&gt;
+    Drawable(T obj);
+    void draw() const;
+    // + copy/move
+};
+            </code></pre>
+            <p class="fragment fade-in" data-fragment-index="1" style="font-size: 0.75em;">Duck-typed: any type with <code>draw()</code></p>
+        </div>
+        <div style="flex: 1;">
+            <p style="font-size: 0.85em; color: var(--accent);"><strong>std::polymorphic</strong></p>
+            <pre><code class="language-cpp" data-trim data-noescape style="font-size: 0.65em;">
+std::polymorphic&lt;Shape&gt; shape = Circle{2.0};
+
+// That's it.
+// Deep copy, value semantics,
+// polymorphism — all built-in.
+            </code></pre>
+            <p class="fragment fade-in" data-fragment-index="1" style="font-size: 0.75em;">Requires a base class (inheritance)</p>
+        </div>
+    </div>
+    <div class="fragment fade-up" data-fragment-index="2" style="margin-top: 1em; font-size: 0.85em;">
+        <table style="font-size: 0.9em;">
+            <tr>
+                <td></td>
+                <td><strong>Our Drawable</strong></td>
+                <td><strong>std::polymorphic</strong></td>
+            </tr>
+            <tr>
+                <td>Non-intrusive</td>
+                <td style="color: var(--accent);">Yes (duck-typed)</td>
+                <td>No (needs base)</td>
+            </tr>
+            <tr>
+                <td>Standard library</td>
+                <td>No (custom)</td>
+                <td style="color: var(--accent);">Yes (C++26)</td>
+            </tr>
+            <tr>
+                <td>Value semantics</td>
+                <td style="color: var(--accent);">Yes</td>
+                <td style="color: var(--accent);">Yes</td>
+            </tr>
+        </table>
+    </div>
+</section>

@@ -1,0 +1,21 @@
+<section>
+    <h3>std::variant</h3>
+    <pre><code class="language-cpp" data-trim data-noescape>
+using Shape = std::variant&lt;Circle, Square&gt;;
+
+std::vector&lt;Shape&gt; shapes;
+shapes.push_back(Circle{2.0});
+shapes.push_back(Square{3.0});
+
+for (auto&amp; s : shapes) {
+    std::visit([](auto&amp; shape) { shape.draw(); }, s);
+}
+    </code></pre>
+    <div class="fragment fade-up" style="margin-top: 0.8em;">
+        <ul>
+            <li><strong>Closed set</strong> &mdash; every type must be listed at compile time</li>
+            <li><strong>Visitor is verbose</strong> &mdash; gets unwieldy with many types</li>
+            <li>Adding a new type requires modifying the variant definition</li>
+        </ul>
+    </div>
+</section>

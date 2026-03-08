@@ -1,0 +1,29 @@
+<section>
+    <h3>std::polymorphic&lt;Shape&gt;</h3>
+    <p style="font-size: 0.85em; color: var(--text-light);">Value semantics + polymorphism, built into the standard. <em>(P3019)</em></p>
+    <pre><code class="language-cpp" data-trim data-noescape>
+struct Shape {
+    virtual ~Shape() = default;
+    virtual void draw() const = 0;
+};
+
+struct Circle : Shape {
+    double radius;
+    void draw() const override {
+        std::cout &lt;&lt; "Circle(" &lt;&lt; radius &lt;&lt; ")\n";
+    }
+};
+    </code></pre>
+    <div class="fragment fade-up">
+        <pre><code class="language-cpp" data-trim data-noescape>
+std::vector&lt;std::polymorphic&lt;Shape&gt;&gt; shapes;
+shapes.push_back(Circle{2.0});
+shapes.push_back(Square{3.0});
+
+auto copy = shapes; // deep copy, just works!
+        </code></pre>
+    </div>
+    <p class="fragment fade-up" style="font-size: 0.85em;">
+        Copyable, movable, no <code>unique_ptr</code>, no slicing.
+    </p>
+</section>

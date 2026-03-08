@@ -1,0 +1,30 @@
+<section>
+    <h3>Step 4 bis &mdash; Heterogeneous Collection</h3>
+    <pre><code class="language-cpp" data-trim data-noescape>
+// No inheritance needed!
+struct Circle {
+    double radius;
+    void draw() const { std::cout &lt;&lt; "Circle(" &lt;&lt; radius &lt;&lt; ")\n"; }
+};
+
+struct Square {
+    double side;
+    void draw() const { std::cout &lt;&lt; "Square(" &lt;&lt; side &lt;&lt; ")\n"; }
+};
+    </code></pre>
+    <div class="fragment fade-up">
+        <pre><code class="language-cpp" data-trim data-noescape>
+// Value semantics, no pointers in user code!
+std::vector&lt;Drawable&gt; shapes;
+shapes.push_back(Circle{2.0});
+shapes.push_back(Square{3.0});
+
+for (auto&amp; s : shapes) {
+    s.draw();
+}
+        </code></pre>
+    </div>
+    <p class="fragment fade-up" style="color: var(--accent); font-style: italic; margin-top: 0.5em;">
+        No base class, no pointers, no variant &mdash; just values.
+    </p>
+</section>

@@ -1,0 +1,28 @@
+<section>
+    <h3>Step 4 &mdash; Template Constructor + Public API</h3>
+    <pre><code class="language-cpp" data-trim data-noescape>
+class Drawable {
+    struct Concept { /* ... */ };
+
+    template &lt;typename T&gt;
+    struct Model : Concept { /* ... */ };
+
+    std::unique_ptr&lt;Concept&gt; self;
+
+public:
+    template &lt;typename T&gt;
+    Drawable(T obj)
+        : self(std::make_unique&lt;Model&lt;T&gt;&gt;(std::move(obj))) {}
+
+    void draw() const {
+        self-&gt;draw();
+    }
+};
+    </code></pre>
+    <div class="fragment fade-up" style="margin-top: 0.5em;">
+        <p style="font-size: 0.85em;">
+            The constructor <strong>deduces T</strong> automatically &mdash;
+            any type with <code>draw()</code> just works.
+        </p>
+    </div>
+</section>

@@ -1,0 +1,20 @@
+<section>
+    <h3>std::any</h3>
+    <pre><code class="language-cpp" data-trim data-noescape>
+std::any a = 42;
+std::cout &lt;&lt; std::any_cast&lt;int&gt;(a) &lt;&lt; "\n";        // 42
+
+a = std::string("hello");
+std::cout &lt;&lt; std::any_cast&lt;std::string&gt;(a) &lt;&lt; "\n"; // hello
+
+a = Circle{5.0};
+std::any_cast&lt;Circle&gt;(a).draw();                     // Circle(5)
+    </code></pre>
+    <div class="fragment fade-up" style="margin-top: 0.8em;">
+        <ul>
+            <li>Stores <strong>any type</strong> with value semantics</li>
+            <li><strong>any_cast</strong> throws <strong>bad_any_cast</strong> on type mismatch</li>
+            <li><strong>No interface</strong>&mdash; you must know the type to extract it</li>
+        </ul>
+    </div>
+</section>

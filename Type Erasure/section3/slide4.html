@@ -1,0 +1,35 @@
+<section>
+    <h3>The Concept / Model Pattern</h3>
+    <div style="display: flex; align-items: center; gap: 2em; justify-content: center;">
+        <div style="text-align: left; font-size: 0.8em;">
+            <div class="fragment fade-in" data-fragment-index="1">
+                <p><strong style="color: var(--accent);">Wrapper</strong> &mdash; public API, value semantics</p>
+            </div>
+            <div class="fragment fade-in" data-fragment-index="2">
+                <p><strong style="color: var(--accent);">Concept</strong> &mdash; private abstract interface</p>
+            </div>
+            <div class="fragment fade-in" data-fragment-index="3">
+                <p><strong style="color: var(--accent);">Model&lt;T&gt;</strong> &mdash; template that wraps any conforming type</p>
+            </div>
+        </div>
+        <pre style="min-width: 420px; margin: 0;"><code class="language-cpp" data-trim data-noescape data-line-numbers="1,16|1-3,16|1-7, 16|1-16" data-fragment-index="1">class Drawable {
+  // public draw()
+  // stores unique_ptr&lt;Concept&gt;    
+
+  struct Concept {
+    virtual void draw() = 0;
+  };
+
+  template&lt;typename T&gt;
+  struct Model : Concept {
+    T obj;
+    void draw() {
+      obj.draw();
+    }
+  };
+};</code></pre>
+    </div>
+    <p class="fragment fade-up" data-fragment-index="4" style="margin-top: 1em; color: var(--accent); font-style: italic;">
+        Let's build this step by step.
+    </p>
+</section>

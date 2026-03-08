@@ -1,0 +1,41 @@
+<section>
+    <h3>Constraining with Concepts (C++20)</h3>
+    <p style="font-size: 0.85em; color: var(--text-light);">
+        Without constraints, passing a wrong type produces <em>unreadable</em> errors deep inside <code>Model&lt;T&gt;</code>.
+    </p>
+    <div style="display: flex; gap: 1em; align-items: flex-start;">
+        <div style="flex: 1;">
+            <pre class="fragment fade-in" data-fragment-index="1"><code class="language-cpp" data-trim data-noescape>
+// Define the concept
+template &lt;typename T&gt;
+concept HasDraw = requires(const T&amp; t) {
+    t.draw();
+};
+            </code></pre>
+            <pre class="fragment fade-in" data-fragment-index="2"><code class="language-cpp" data-trim data-noescape>
+// Constrain the constructor
+template &lt;HasDraw T&gt;
+Drawable(T obj)
+    : self(std::make_unique&lt;Model&lt;T&gt;&gt;(
+        std::move(obj))) {}
+            </code></pre>
+        </div>
+        <div class="fragment fade-in" data-fragment-index="3" style="flex: 1;">
+            <pre><code class="language-cpp" data-trim data-noescape style="font-size: 0.85em;">
+struct NotDrawable { int x; };
+Drawable d{NotDrawable{}};
+            </code></pre>
+            <p style="font-size: 0.7em; color: #ff5555; text-align: left; margin-top: 0.5em;">
+                <strong>Before:</strong> Wall of errors inside <code>Model&lt;T&gt;::draw()</code><br>
+                <em>"no member named 'draw' in 'NotDrawable'"</em> &mdash; buried in template instantiation.
+            </p>
+            <p style="font-size: 0.7em; color: #50fa7b; text-align: left; margin-top: 0.5em;">
+                <strong>After:</strong> Clear, immediate message<br>
+                <em>"constraints not satisfied for 'Drawable(T)' [with T = NotDrawable]"</em>
+            </p>
+        </div>
+    </div>
+    <p class="fragment fade-up" data-fragment-index="4" style="margin-top: 0.8em; font-size: 0.85em; color: var(--accent); font-style: italic;">
+        Concepts make the interface explicit and errors actionable.
+    </p>
+</section>

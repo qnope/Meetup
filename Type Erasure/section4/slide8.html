@@ -1,0 +1,36 @@
+<section>
+    <h3>Complete Implementation</h3>
+    <pre><code class="language-cpp" data-trim data-noescape style="font-size: 0.65em;">
+class Drawable {
+    struct Concept {
+        virtual ~Concept() = default;
+        virtual void draw() const = 0;
+        virtual std::unique_ptr&lt;Concept&gt; clone() const = 0;
+    };
+
+    template &lt;typename T&gt;
+    struct Model : Concept {
+        T obj;
+        Model(T obj) : obj(std::move(obj)) {}
+        void draw() const override { obj.draw(); }
+        std::unique_ptr&lt;Concept&gt; clone() const override { return std::make_unique&lt;Model&gt;(obj); }
+    };
+
+    std::unique_ptr&lt;Concept&gt; self;
+
+public:
+    template &lt;typename T&gt;
+    Drawable(T obj) : self(std::make_unique&lt;Model&lt;T&gt;&gt;(std::move(obj))) {}
+
+    Drawable(const Drawable&amp; other) : self(other.self-&gt;clone()) {}
+    Drawable&amp; operator=(const Drawable&amp; other) { self = other.self-&gt;clone(); return *this; }
+    Drawable(Drawable&amp;&amp;) = default;
+    Drawable&amp; operator=(Drawable&amp;&amp;) = default;
+
+    void draw() const { self-&gt;draw(); }
+};
+    </code></pre>
+    <p class="fragment fade-up" style="color: var(--accent); font-style: italic;">
+        ~30 lines. Non-intrusive, type-safe, value semantics, open set.
+    </p>
+</section>

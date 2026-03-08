@@ -1,0 +1,28 @@
+<section>
+    <h3>Step 3 &mdash; Create Model&lt;T&gt;</h3>
+    <p style="font-size: 0.85em; color: var(--text-light);">A template that wraps <em>any</em> type with a <code>draw()</code> method.</p>
+    <pre><code class="language-cpp" data-trim data-noescape data-line-numbers="7-17">
+class Drawable {
+    struct Concept {
+        virtual ~Concept() = default;
+        virtual void draw() const = 0;
+    };
+
+    template &lt;typename T&gt;
+    struct Model : Concept {
+        T obj;
+
+        Model(T obj) : obj(std::move(obj)) {}
+
+        void draw() const override {
+            obj.draw();
+        }
+    };
+
+    std::unique_ptr&lt;Concept&gt; self;
+};
+    </code></pre>
+    <p class="fragment fade-up" style="font-size: 0.85em;">
+        <strong style="color: var(--accent);">Model&lt;T&gt;</strong> bridges any concrete type to the internal Concept.
+    </p>
+</section>

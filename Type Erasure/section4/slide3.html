@@ -1,0 +1,21 @@
+<section>
+    <h3>Step 2 &mdash; Extract the Concept</h3>
+    <p style="font-size: 0.85em; color: var(--text-light);">Move the interface <em>inside</em> a wrapper class.</p>
+    <pre><code class="language-cpp" data-trim data-noescape>
+class Drawable {
+    struct Concept {
+        virtual ~Concept() = default;
+        virtual void draw() const = 0;
+    };
+
+    std::unique_ptr&lt;Concept&gt; self;
+};
+    </code></pre>
+    <div class="fragment fade-up" style="margin-top: 0.8em;">
+        <p style="font-size: 0.85em;">
+            <strong style="color: var(--accent);">Key insight:</strong>
+            the abstract base class is now a <em>private implementation detail</em>.
+            <br>External types don't need to know about it.
+        </p>
+    </div>
+</section>

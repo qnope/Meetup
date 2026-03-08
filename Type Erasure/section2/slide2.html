@@ -1,0 +1,32 @@
+<section>
+    <h3>Inheritance + Virtual</h3>
+    <pre style="margin: 0.2em auto;"><code class="language-cpp" data-trim data-noescape>
+struct Shape {
+    virtual ~Shape() = default;
+    virtual void draw() const = 0;
+};
+    </code></pre>
+    <div class="fragment fade-up" style="display: flex; gap: 0.5em; justify-content: center; align-items: start; margin: 0.2em 0;">
+        <pre style="margin: 0;"><code class="language-cpp" data-trim data-noescape>
+struct Circle : Shape {
+    double radius;
+    void draw() const override {
+        std::cout &lt;&lt; "Circle(" &lt;&lt; radius &lt;&lt; ")\n";
+    }
+};
+        </code></pre>
+        <pre style="margin: 0;"><code class="language-cpp" data-trim data-noescape>
+struct Square : Shape {
+    double side;
+    void draw() const override {
+        std::cout &lt;&lt; "Square(" &lt;&lt; side &lt;&lt; ")\n";
+    }
+};
+        </code></pre>
+    </div>
+    <div class="fragment fade-up" style="margin: 0.2em 0;">
+        <pre style="margin: 0;"><code class="language-cpp" data-trim>
+std::vector&lt;std::unique_ptr&lt;Shape&gt;&gt; shapes;
+        </code></pre>
+    </div>
+</section>

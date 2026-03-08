@@ -1,0 +1,26 @@
+<section>
+    <h3>std::indirect&lt;T&gt;</h3>
+    <p style="font-size: 0.85em; color: var(--text-light);">Also from P3019 &mdash; value semantics without polymorphism.</p>
+    <pre><code class="language-cpp" data-trim data-noescape>
+// Like unique_ptr but with value semantics
+std::indirect&lt;std::string&gt; name = "hello";
+
+auto copy = name; // deep copy
+*copy = "world";
+
+std::cout &lt;&lt; *name &lt;&lt; "\n";  // "hello" — independent copy
+std::cout &lt;&lt; *copy &lt;&lt; "\n";  // "world"
+    </code></pre>
+    <div class="fragment fade-up" style="margin-top: 1em;">
+        <table style="font-size: 0.8em;">
+            <tr>
+                <td><code>std::indirect&lt;T&gt;</code></td>
+                <td>Value semantics, <strong>no polymorphism</strong></td>
+            </tr>
+            <tr>
+                <td><code>std::polymorphic&lt;T&gt;</code></td>
+                <td>Value semantics <strong>+ polymorphism</strong></td>
+            </tr>
+        </table>
+    </div>
+</section>

@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Type Erasure in C++</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/theme/dracula.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css">
+    <style>
+        .reveal pre {
+            width: auto;
+            display: inline-block;
+        }
+        .reveal section {
+            text-align: center;
+        }
+        .reveal pre code {
+            text-align: left;
+            max-height: none !important;
+            overflow: hidden !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+
+            <!-- Section 0: Title -->
+            <section data-external="section0/slide0.html"></section>
+
+            <!-- Section 1: The Problem -->
+            <section>
+                <section data-external="section1/slide1.html"></section>
+                <section data-external="section1/slide2.html"></section>
+                <section data-external="section1/slide3.html"></section>
+            </section>
+
+            <!-- Section 2: Existing Solutions -->
+            <section>
+                <section data-external="section2/slide1.html"></section>
+                <section data-external="section2/slide2.html"></section>
+                <section data-external="section2/slide3.html"></section>
+                <section data-external="section2/slide4.html"></section>
+                <section data-external="section2/slide5.html"></section>
+                <section data-external="section2/slide6.html"></section>
+            </section>
+
+            <!-- Section 3: Type Erasure in the Standard -->
+            <section>
+                <section data-external="section3/slide1.html"></section>
+                <section data-external="section3/slide2.html"></section>
+                <section data-external="section3/slide3.html"></section>
+                <section data-external="section3/slide4.html"></section>
+            </section>
+
+            <!-- Section 4: Building Type Erasure (Core) -->
+            <section>
+                <section data-external="section4/slide1.html"></section>
+                <section data-external="section4/slide2.html"></section>
+                <section data-external="section4/slide3.html"></section>
+                <section data-external="section4/slide4.html"></section>
+                <section data-external="section4/slide5.html"></section>
+                <section data-external="section4/slide6.html"></section>
+                <section data-external="section4/slide7.html"></section>
+                <section data-external="section4/slide8.html"></section>
+                <section data-external="section4/slide9.html"></section>
+                <section data-external="section4/slide10.html"></section>
+            </section>
+
+            <!-- Section 5: C++26 std::polymorphic -->
+            <section>
+                <section data-external="section5/slide1.html"></section>
+                <section data-external="section5/slide2.html"></section>
+                <section data-external="section5/slide3.html"></section>
+                <section data-external="section5/slide4.html"></section>
+            </section>
+
+            <!-- Section 6: Conclusion -->
+            <section>
+                <section data-external="section6/slide1.html"></section>
+                <section data-external="section6/slide2.html"></section>
+                <section data-external="section6/slide3.html"></section>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/plugin/highlight/highlight.min.js"></script>
+    <script>
+        // Load external slides
+        async function loadExternalSlides() {
+            const sections = document.querySelectorAll('[data-external]');
+            await Promise.all(Array.from(sections).map(async (section) => {
+                const url = section.getAttribute('data-external');
+                const response = await fetch(url);
+                const html = await response.text();
+                // Parse the loaded HTML and replace the section
+                const temp = document.createElement('div');
+                temp.innerHTML = html.trim();
+                const loaded = temp.firstElementChild;
+                // Copy attributes from loaded section to current section
+                for (const attr of loaded.attributes) {
+                    if (attr.name !== 'data-external') {
+                        section.setAttribute(attr.name, attr.value);
+                    }
+                }
+                section.innerHTML = loaded.innerHTML;
+                section.removeAttribute('data-external');
+            }));
+        }
+
+        function fitSlideContent() {
+            const slides = document.querySelectorAll('.reveal .slides section:not([data-has-children])');
+            slides.forEach(slide => {
+                // Skip section parents (vertical stacks)
+                if (slide.querySelector('section')) return;
+
+                // Wrap content in a container if not already wrapped
+                let wrapper = slide.querySelector('.slide-content');
+                if (!wrapper) {
+                    wrapper = document.createElement('div');
+                    wrapper.className = 'slide-content';
+                    while (slide.firstChild) {
+                        wrapper.appendChild(slide.firstChild);
+                    }
+                    slide.appendChild(wrapper);
+                }
+
+                // Make all fragments temporarily visible for measurement
+                const fragments = wrapper.querySelectorAll('.fragment');
+                fragments.forEach(f => f.style.opacity = '1');
+
+                // Reset styles to measure natural size
+                wrapper.style.transform = 'none';
+                wrapper.style.transformOrigin = '';
+                wrapper.style.height = '';
+                wrapper.style.marginBottom = '';
+
+                const slideHeight = Reveal.getConfig().height;
+                const slideWidth = Reveal.getConfig().width;
+                const padding = 40;
+                const availableHeight = slideHeight - padding * 2;
+                const availableWidth = slideWidth - padding * 2;
+
+                const contentHeight = wrapper.scrollHeight;
+                const contentWidth = wrapper.scrollWidth;
+
+                if (contentWidth > 0 && contentHeight > 0) {
+                    const scaleX = availableWidth / contentWidth;
+                    const scaleY = availableHeight / contentHeight;
+                    const scale = Math.min(scaleX, scaleY, 1);
+
+                    if (scale < 1) {
+                        wrapper.style.transformOrigin = 'top center';
+                        wrapper.style.transform = `scale(${scale})`;
+                        wrapper.style.height = contentHeight + 'px';
+                        wrapper.style.marginBottom = -(contentHeight * (1 - scale)) + 'px';
+                    }
+                }
+
+                // Restore fragment visibility
+                fragments.forEach(f => f.style.opacity = '');
+            });
+        }
+
+        loadExternalSlides().then(() => {
+        Reveal.initialize({
+            hash: true,
+            transition: 'slide',
+            transitionSpeed: 'default',
+            backgroundTransition: 'fade',
+            plugins: [RevealHighlight],
+            width: 1280,
+            height: 720,
+            controlsLayout: 'edges',
+            navigationMode: 'linear',
+        }).then(() => {
+            fitSlideContent();
+            Reveal.on('slidechanged', fitSlideContent);
+            Reveal.on('resize', fitSlideContent);
+        });
+        });
+    </script>
+</body>
+</html>

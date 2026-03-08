@@ -1,0 +1,39 @@
+<section>
+    <h3>Small Buffer Optimization (SBO)</h3>
+    <div style="display: flex; gap: 2em; justify-content: center; align-items: start; margin-top: 1em;">
+        <div style="text-align: left; font-size: 0.8em; flex: 1;">
+            <p class="fragment fade-in" data-fragment-index="1">
+                <strong>Without SBO</strong><br>
+                Every <code>Drawable</code> allocates on the heap via <code>make_unique</code>.
+            </p>
+            <p class="fragment fade-in" data-fragment-index="2">
+                <strong>With SBO</strong><br>
+                Small objects are stored <em>inline</em> in a fixed-size buffer, avoiding allocation.
+            </p>
+            <p class="fragment fade-in" data-fragment-index="3" style="color: var(--text-light);">
+                <code>std::function</code> and <code>std::any</code> both use SBO internally.
+            </p>
+        </div>
+        <div style="min-width: 300px; flex: 1;">
+            <div class="fragment fade-in" data-fragment-index="1">
+                <pre><code class="language-cpp" data-trim>
+// Without SBO
+std::unique_ptr&lt;Concept&gt; self;
+// heap alloc every time
+                </code></pre>
+            </div>
+            <div class="fragment fade-in" data-fragment-index="2">
+                <pre><code class="language-cpp" data-trim>
+// With SBO
+alignas(...) char buf[N];
+Concept* self;
+// placement new if sizeof(T) &lt;= N
+// heap alloc otherwise
+                </code></pre>
+            </div>
+        </div>
+    </div>
+    <p class="fragment fade-up" data-fragment-index="4" style="margin-top: 1em; font-size: 0.85em; color: var(--text-light);">
+        We won't implement it here &mdash; just know it exists and matters for performance.
+    </p>
+</section>
